@@ -1,0 +1,240 @@
+package com.gcl.system;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Scanner;
+
+public class FinanceManager {
+    private ArrayList<Record> incomes=new ArrayList<>();
+    private ArrayList<Record> expenses=new ArrayList<>();
+
+    public FinanceManager(){}
+
+    public FinanceManager(ArrayList<Record> incomes, ArrayList<Record> expenses) {
+        this.incomes = incomes;
+        this.expenses = expenses;
+    }
+    //方法:记录收入
+    public void addIncome(Date date, int money, String notes, String category){
+        if(money<=0){
+            System.out.println("收入金额必须为正数");
+            return;
+        }else{
+            incomes.add(new Record(date,money,notes,category));
+        }
+    }
+    //方法:记录支出
+    public void addExpenses(Date date,int money,String notes,String category){
+        if(money<=0){
+            System.out.println("支出金额必须为正数");
+            return;
+        }else{
+            expenses.add(new Record(date,money,notes,category));
+        }
+    }
+    // 展示所有账单记录
+    public void displayAllRecords() {
+        System.out.println("所有收入记录：");
+        for (Record income : incomes) {
+            System.out.println(income);
+        }
+        System.out.println("所有支出记录：");
+        for (Record expense : expenses) {
+            System.out.println(expense);
+        }
+    }
+    // 按日期查询账单
+    public void queryByDate(Date date) {
+        System.out.println("指定日期的收入记录：");
+        for (Record income : incomes) {
+            if (income.getDate().equals(date)) {
+                System.out.println(income);
+            }
+        }
+        System.out.println("指定日期的支出记录：");
+        for (Record expense : expenses) {
+            if (expense.getDate().equals(date)) {
+                System.out.println(expense);
+            }
+        }
+    }
+
+    // 按日期范围查询账单
+    public void queryByDateRange(Date startDate, Date endDate) {
+        System.out.println("指定日期范围内的收入记录：");
+        for (Record income : incomes) {
+            if (income.getDate().after(startDate) && income.getDate().before(endDate)) {
+                System.out.println(income);
+            }
+        }
+        System.out.println("指定日期范围内的支出记录：");
+        for (Record expense : expenses) {
+            if (expense.getDate().after(startDate) && expense.getDate().before(endDate)) {
+                System.out.println(expense);
+            }
+        }
+    }
+
+    // 按类别查询账单
+    public void queryByCategory(String category) {
+        System.out.println("指定类别的收入记录：");
+        for (Record income : incomes) {
+            if (income.getCategory().equals(category)) {
+                System.out.println(income);
+            }
+        }
+        System.out.println("指定类别的支出记录：");
+        for (Record expense : expenses) {
+            if (expense.getCategory().equals(category)) {
+                System.out.println(expense);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        //创建类的实例
+        FinanceManager manager=new FinanceManager();
+        Scanner sc=new Scanner(System.in);
+        while(true){
+            System.out.println("请选择:  1.记录收入  2.记录支出  3.展示所有账单 4.按日期查询账单 5.按日期范围查询账单 6.按类别查询账单 7.退出");
+            int choice=sc.nextInt();
+            sc.nextLine(); // 添加这行代码来消耗掉行尾的换行符
+            if(choice==1){
+                System.out.println("请输入日期(格式:yyyy--MM--dd)");
+                SimpleDateFormat dateFormat=new SimpleDateFormat("yyy--MM--dd");
+                Date date=null;
+                try {
+                    String datestr=sc.nextLine();
+                    date=dateFormat.parse(datestr);//将用户输入的日期字符串转化为Date对象
+                }catch(ParseException e){
+                    System.out.println("日期格式错误,请重新输入");
+                }
+
+                System.out.println("请输入收入金额");
+                int money=sc.nextInt();
+                sc.nextLine(); // 添加这行代码来消耗掉行尾的换行符
+                System.out.println("请输入收入类别");
+                String category=sc.nextLine();
+                System.out.println("请输入备注");
+                String notes=sc.nextLine();
+                manager.addIncome(date,money,notes,category);
+            }else if(choice==2){
+                System.out.println("请输入日期(格式:yyyy--MM--dd)");
+                SimpleDateFormat dateFormat=new SimpleDateFormat("yyy--MM--dd");
+                Date date=null;
+                try{
+                    String datestr=sc.nextLine();
+                    date= dateFormat.parse(datestr);
+                }catch(ParseException e){
+                    System.out.println("日期格式错误,请重新输入");
+                }
+                System.out.println("请输入支出金额");
+                int money=sc.nextInt();
+                sc.nextLine(); // 添加这行代码来消耗掉行尾的换行符
+                System.out.println("请输入支出类别");
+                String category=sc.nextLine();
+                System.out.println("请输入备注");
+                String notes=sc.nextLine();
+                manager.addExpenses(date,money,notes,category);
+            }else if(choice==3){
+                manager.displayAllRecords();
+            }else if(choice==4){
+                System.out.println("请输入查询账单的日期 (格式: yyyy-MM-dd)");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Date queryDate = null;
+                try {
+                    String dateStr = sc.nextLine();
+                    queryDate = dateFormat.parse(dateStr);
+                } catch (ParseException e) {
+                    System.out.println("日期格式错误，请重新输入");
+                    break;
+                }
+                manager.queryByDate(queryDate);
+            }else if(choice==5){
+                System.out.println("请输入查询账单的开始日期 (格式: yyyy-MM-dd)");
+                SimpleDateFormat dateFormatRange = new SimpleDateFormat("yyyy-MM-dd");
+                Date startDate = null, endDate = null;
+                try {
+                    String startDateStr = sc.nextLine();
+                    startDate = dateFormatRange.parse(startDateStr);
+                } catch (ParseException e) {
+                    System.out.println("开始日期格式错误，请重新输入");
+                }
+                try {
+                    System.out.println("请输入查询账单的结束日期 (格式: yyyy-MM-dd)");
+                    String endDateStr = sc.nextLine();
+                    endDate = dateFormatRange.parse(endDateStr);
+                } catch (ParseException e) {
+                    System.out.println("结束日期格式错误，请重新输入");
+                }
+                manager.queryByDateRange(startDate, endDate);
+            }else if(choice==6){
+                System.out.println("请输入查询账单的类别");
+                String category = sc.nextLine();
+                manager.queryByCategory(category);
+            }else if(choice==7){
+                sc.close();
+            }
+            else{
+                System.out.println("无效选择,请重新输入");
+                break;
+            }
+        }
+    sc.close();
+    }
+}
+
+package com.gcl.system;
+
+import java.util.Date;
+
+ public class Record {
+    private Date date;
+    private int money;
+    private String notes;
+    private String category;
+    //空参构造
+    public Record(){}
+     //全参数构造
+     public Record(Date date, int money, String notes, String category) {
+         this.date = date;
+         this.money = money;
+         this.notes = notes;
+         this.category = category;
+     }
+     //get set
+     public Date getDate() {
+         return date;
+     }
+
+     public void setDate(Date date) {
+         this.date = date;
+     }
+
+     public int getMoney() {
+         return money;
+     }
+
+     public void setMoney(int money) {
+         this.money = money;
+     }
+
+     public String getNotes() {
+         return notes;
+     }
+
+     public void setNotes(String notes) {
+         this.notes = notes;
+     }
+
+     public String getCategory() {
+         return category;
+     }
+
+     public void setCategory(String category) {
+         this.category = category;
+     }
+ }
