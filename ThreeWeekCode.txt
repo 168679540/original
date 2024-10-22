@@ -123,7 +123,7 @@ public class FinanceManager {
                 manager.addIncome(date,money,notes,category);
             }else if(choice==2){
                 System.out.println("请输入日期(格式:yyyy--MM--dd)");
-                SimpleDateFormat dateFormat=new SimpleDateFormat("yyy--MM--dd");
+                SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy--MM--dd");
                 Date date=null;
                 try{
                     String datestr=sc.nextLine();
@@ -142,8 +142,8 @@ public class FinanceManager {
             }else if(choice==3){
                 manager.displayAllRecords();
             }else if(choice==4){
-                System.out.println("请输入查询账单的日期 (格式: yyyy-MM-dd)");
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                System.out.println("请输入查询账单的日期 (格式: yyyy--MM--dd)");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy--MM--dd");
                 Date queryDate = null;
                 try {
                     String dateStr = sc.nextLine();
@@ -154,8 +154,8 @@ public class FinanceManager {
                 }
                 manager.queryByDate(queryDate);
             }else if(choice==5){
-                System.out.println("请输入查询账单的开始日期 (格式: yyyy-MM-dd)");
-                SimpleDateFormat dateFormatRange = new SimpleDateFormat("yyyy-MM-dd");
+                System.out.println("请输入查询账单的开始日期 (格式: yyyy--MM--dd)");
+                SimpleDateFormat dateFormatRange = new SimpleDateFormat("yyyy--MM--dd");
                 Date startDate = null, endDate = null;
                 try {
                     String startDateStr = sc.nextLine();
@@ -164,7 +164,7 @@ public class FinanceManager {
                     System.out.println("开始日期格式错误，请重新输入");
                 }
                 try {
-                    System.out.println("请输入查询账单的结束日期 (格式: yyyy-MM-dd)");
+                    System.out.println("请输入查询账单的结束日期 (格式: yyyy--MM--dd)");
                     String endDateStr = sc.nextLine();
                     endDate = dateFormatRange.parse(endDateStr);
                 } catch (ParseException e) {
@@ -176,14 +176,15 @@ public class FinanceManager {
                 String category = sc.nextLine();
                 manager.queryByCategory(category);
             }else if(choice==7){
+               System.out.println("退出程序。");
                 sc.close();
+                System.exit(0);
             }
             else{
                 System.out.println("无效选择,请重新输入");
-                break;
+                continue;
             }
         }
-    sc.close();
     }
 }
 
@@ -237,5 +238,8 @@ import java.util.Date;
      public void setCategory(String category) {
          this.category = category;
      }
+ @Override
+     public String toString() {
+         return "日期：" + new SimpleDateFormat("yyyy-MM-dd").format(date) + ", 金额：" + money + ", 类别：" + category + ", 备注：" + notes;
+     }
  }
-system.out.print()
